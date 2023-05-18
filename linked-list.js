@@ -126,44 +126,83 @@ class LinkedList {
   /** insertAt(idx, val): add node w/val before idx. */
 
   insertAt(idx, val) {
-    let currentVal = this.head
-    for (let i = 0; i < idx; i++) {
-      if (i + 1 == idx) {
-        //this is node b4 idx
+    //is list empty
+    if (!this.head) {
+      this.head = new Node(val)
+      this.tail = this.head
+      this.length++
+    } else {
+      let currentVal = this.head
+      for (let i = 0; i < idx; i++) {
+        if (i + 1 == idx || this.tail == currentVal) {
+          //this is node b4 idx
 
-        let newNode = new Node(val)
-        newNode.next = currentVal.next
-        if (!currentVal.next) {
-          this.tail = currentVal
+          let newNode = new Node(val)
+          newNode.next = currentVal.next
+          if (!currentVal.next) {
+            this.tail = newNode
+          }
+          currentVal.next = newNode
+          this.length++
         }
-        currentVal.next = newNode
-        this.length++
+        currentVal = currentVal.next
       }
-      currentVal = currentVal.next
     }
   }
 
   /** removeAt(idx): return & remove item at idx, */
 
   removeAt(idx) {
-    let currentVal = this.head
-    for (let i = 0; i <= idx; i++) {
-      if (i == idx) {
-
-        return currentVal.val = val
+    //if this is the only item
+    if (this.length == 1) {
+      const toReturn = this.head.val
+      this.head = null
+      this.tail = null
+      this.length--
+      return toReturn
+    } else {
+      //there is more than 1 item
+      let currentVal = this.head
+      for (let i = 0; i <= idx; i++) {
+        if (i + 1 == idx) {
+          if (currentVal.next == this.tail) {
+            this.tail = currentVal
+          } else {
+            currentVal.next = currentVal.next.next
+          }
+          this.length--
+          return currentVal.val
+        }
+        currentVal = currentVal.next
       }
-      if (currentVal.next == this.tail) {
-
-      }
-
-      currentVal = currentVal.next
     }
   }
 
   /** average(): return an average of all values in the list */
 
   average() {
+    if (!this.head) {
+      return 0
+    } else {
+      //if there is only one item
+      if (this.length == 1) {
+        return this.head.val
+      } else {
+        let currentVal = this.head
+        let runningTotal = 0
+        let numNumbers = 0
+        while (currentVal.next) {
+          runningTotal += currentVal.val
+          numNumbers++
+          currentVal = currentVal.next
 
+        }
+        //this doesn't include the last one, so we add the last one
+        return (runningTotal + this.tail.val) / (numNumbers + 1)
+
+      }
+
+    }
   }
 }
 
